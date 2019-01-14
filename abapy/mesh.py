@@ -187,14 +187,14 @@ class Nodes(object):
     sets = self.sets
     X, Y, Z = self.x, self.y, self.z
     if len(labels) == 0:
-      if label == None: label = 1
+      if label is None: label = 1
       if label < 1: raise Exception, 'node labels must be > 0.'
       labels.append(label)
       X.append(x)
       Y.append(y)
       Z.append(z)
     else:
-      if label == None: 
+      if label is None: 
         label = max(labels)+1
         labels.append(label)
         X.append(x)
@@ -219,7 +219,7 @@ class Nodes(object):
         else:
           print 'Info: node with label {0} already exists, nothing changed.'.format(label)
           return
-    if toset != None:
+    if toset is not None:
       if type(toset) is str:
         self.add_set(toset,[label])
       else:
@@ -873,7 +873,7 @@ class Mesh(object):
   
   def __init__(self,nodes = None,connectivity=[],space=[],labels=[],name=None, sets={}, surfaces = {}):
     from array import array
-    if nodes == None: nodes = Nodes() 
+    if nodes is None: nodes = Nodes() 
     if isinstance(nodes,Nodes):
       self.nodes = nodes 
       self.dti = nodes.dti
@@ -882,7 +882,7 @@ class Mesh(object):
       dtf = self.dtf
     else:
       raise Exception, 'nodes argument must be a Nodes class instance.'
-    if name == None: name = [None for i in labels]
+    if name is None: name = [None for i in labels]
     self.labels = array(dti,[])
     self.connectivity = []
     self.space = array('H',[])
@@ -908,12 +908,12 @@ class Mesh(object):
     if type(s) in [int, long]:
       labs = [s]
     if type(s) is slice:
-      if s.start != None: 
+      if s.start is not None: 
         start = s.start
       else: 
         start = 1
       stop  = s.stop
-      if s.step != None: 
+      if s.step is not None: 
         step = s.step
       else: 
         step = 1
@@ -1016,7 +1016,7 @@ class Mesh(object):
     dti, dtf = self.dti, self.dtf
     # Input verifications
     connect = array(dti,connectivity)
-    if label == None: 
+    if label is None: 
       if len(self.labels) != 0:
         label = int(max(self.labels)+1)
       else:
@@ -1026,7 +1026,7 @@ class Mesh(object):
     except:
       raise Exception, 'element labels must be int.'
     if space not in [1,2,3]: raise Exception, 'space must be 1,2 or 3'
-    if name == None: name = ''
+    if name is None: name = ''
     if type(name) is not str: raise Exception, 'name type must be str'  
     # inputs processing
     if label in self.labels: 
@@ -1053,7 +1053,7 @@ class Mesh(object):
           self.connectivity.insert(i,connect)
           self.space.insert(i,space)
           self.name.insert(i,name)
-    if toset != None:
+    if toset is not None:
       if type(toset) is str:
         self.add_set(toset,[label])
       else:
@@ -1388,12 +1388,12 @@ class Mesh(object):
               borderEdges.pop(bi(edge))
             if b1 == False: 
               borderEdges.pop(bi(revert))
-    if xmin == None: xmin = min(x)
-    if xmax == None: xmax = max(x)
-    if ymin == None: ymin = min(y)
-    if ymax == None: ymax = max(y)
-    if zmin == None: zmin = min(z)
-    if zmax == None: zmax = max(z)
+    if xmin is None: xmin = min(x)
+    if xmax is None: xmax = max(x)
+    if ymin is None: ymin = min(y)
+    if ymax is None: ymax = max(y)
+    if zmin is None: zmin = min(z)
+    if zmax is None: zmax = max(z)
     
     def test_func(x,y,z):
       '''
@@ -1448,12 +1448,12 @@ class Mesh(object):
           revert = (edge[1],edge[0]) 
           if revert not in borderEdges and edge not in borderEdges:
             borderEdges.append(edge)
-    if xmin == None: xmin = min(x)
-    if xmax == None: xmax = max(x)
-    if ymin == None: ymin = min(y)
-    if ymax == None: ymax = max(y)
-    if zmin == None: zmin = min(z)
-    if zmax == None: zmax = max(z)
+    if xmin is None: xmin = min(x)
+    if xmax is None: xmax = max(x)
+    if ymin is None: ymin = min(y)
+    if ymax is None: ymax = max(y)
+    if zmin is None: zmin = min(z)
+    if zmax is None: zmax = max(z)
     
     def test_func(x,y,z):
       '''
@@ -1720,7 +1720,7 @@ class Mesh(object):
                 oldconn = [oldconn[-1],oldconn[0],oldconn[1],oldconn[2]]
                 nodesOnAxis = get_nodesOnAxis(oldconn)
               newconn = [oldconn[0], layer * nmax  + oldconn[1], (layer+1) * nmax  + oldconn[1], oldconn[3], layer * nmax  + oldconn[2], (layer+1) * nmax  + oldconn[2]] 
-          if newconn != None: 
+          if newconn is not None: 
             name  = te.name[ne]
             if name in mapping.keys():
               name = mapping[name]
@@ -1882,7 +1882,7 @@ class Mesh(object):
       for key in nfields.keys():      
         out += fields[key].dump2vtk(name = key, header = header)
         header = False   
-    if path == None:
+    if path is None:
       return out
     else:
       f = open(path, "wb")
@@ -2102,7 +2102,7 @@ class Mesh(object):
         name = element.name[0]
         self.add_element(label = l + max_elabel, connectivity = conn, space = space, name = name, toset = toset  )
       if simplify:
-        if crit_distance == None:
+        if crit_distance is None:
           self.simplify_nodes()    
         else:
           self.simplify_nodes(crit_distance = crit_distance)
@@ -2368,7 +2368,7 @@ class Mesh(object):
     import matplotlib.collections as collections
     verts = self.faces(use_3D = use_3D)
     if use_3D == False:
-      if face_color == None:
+      if face_color is None:
         patches = collections.LineCollection(verts, 
                             color = edge_color, 
                             linewidth = edge_width) 
@@ -2380,7 +2380,7 @@ class Mesh(object):
                             facecolor = face_color)                      
     else:
       import mpl_toolkits.mplot3d as a3 
-      if face_color == None:
+      if face_color is None:
         patches = a3.art3d.Line3DCollection(verts,
                            edgecolor = edge_color, 
                            linewidth = edge_width)   
@@ -2420,7 +2420,7 @@ class Mesh(object):
     """
     from matplotlib import pyplot as plt
     mesh = copy.copy(self)
-    if disp_func != None: 
+    if disp_func is not None: 
       U = disp_func(mesh.fields)
       mesh.nodes.apply_displacement(U)
     patches = mesh.dump2polygons()
@@ -2428,8 +2428,8 @@ class Mesh(object):
     patches.set_linewidth(edge_width)
     patches.set_edgecolor(edge_color)
     ax.set_aspect("equal")
-    if field_func != None:
-      if cmap == None:
+    if field_func is not None:
+      if cmap is None:
         from matplotlib import cm
         cmap = cm.jet
       X, Y, Z, tri = mesh.dump2triplot()

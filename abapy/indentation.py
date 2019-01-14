@@ -191,7 +191,7 @@ def IndentationMesh(Na = 8, Nb = 8, Ns = 4, Nf = 2 , l =1., name = 'CAX4', dtf =
   def PolarTransition(N = 4, radius = 1., theta0 = -90., theta1 = 0., size = None, name = 'CAX4' ):
     mesh = Transition(N = N, name = 'CAX4')
     t0, t1 = radians(theta0), radians(theta1)
-    if size == None: size = (t1-t0 ) * radius /  N 
+    if size is None: size = (t1-t0 ) * radius /  N 
     def dispTrans(x, y, z, labels):
       ux = -x + (radius + 2 * size *  (1-y)) * cos(t0 + (t1-t0) * x)
       uy = -y + (radius + 2 * size *  (1-y)) * sin(t0 + (t1-t0) * x ) 
@@ -206,7 +206,7 @@ def IndentationMesh(Na = 8, Nb = 8, Ns = 4, Nf = 2 , l =1., name = 'CAX4', dtf =
   def PolarShell(radius = 1., N=2 , Ns = 4, theta0 = -90., theta1 = 0., k = None, name = 'CAX4'):
     t0, t1 = radians(theta0), radians(theta1)
     t = (t1-t0)/N
-    if k == None: k = t / (1.- t/2.)
+    if k is None: k = t / (1.- t/2.)
     y1 = [radius]
     for i in xrange(Ns): y1.append(y1[-1] * (k+1))
     y1.reverse()
@@ -1439,14 +1439,14 @@ I_SAMPLE.SURFACE_FACES, I_INDENTER.SURFACE_FACES
 ** STEPS
 **----------------------------------
 '''
-  if sample_mesh == None:
+  if sample_mesh is None:
     sample_mesh =  ParamInfiniteMesh()
-  if indenter == None:
+  if indenter is None:
     indenter = RigidCone2D()
-  if sample_mat == None:
+  if sample_mat is None:
     from materials import VonMises
     sample_mat = VonMises(labels = 'SAMPLE_MAT')
-  if indenter_mat == None:
+  if indenter_mat is None:
     from materials import Elastic
     indenter_mat = Elastic(labels = 'INDENTER_MAT')
   if is_3D:
@@ -1471,7 +1471,7 @@ I_SAMPLE.SURFACE_FACES, I_INDENTER.SURFACE_FACES
     remove_intersection(front_nodes)
   else:
     csys = ''
-  if steps == None:
+  if steps is None:
     steps = [Step(name = 'LOADING', disp = 1.), Step(name = 'UNLOADING', disp = 0.)]
   if isinstance(steps, Step): steps = [steps]
   sample_mat.labels = ['SAMPLE_MAT']
@@ -1527,20 +1527,20 @@ class Manager:
     from materials import Elastic, VonMises
     self.set_workdir(workdir)
     self.set_abqlauncher(abqlauncher)
-    if samplemesh == None: samplemesh = ParamInfiniteMesh()
+    if samplemesh is None: samplemesh = ParamInfiniteMesh()
     self.set_samplemesh(samplemesh)
-    if indenter == None: indenter = RigidCone2D()
+    if indenter is None: indenter = RigidCone2D()
     self.set_indenter(indenter)
-    if samplemat == None:
+    if samplemat is None:
       from abapy.materials import VonMises
       samplemat = VonMises()
-    if indentermat == None:
+    if indentermat is None:
       from abapy.materials import Elastic
       indentermat = Elastic()
     self.set_samplemat(samplemat)
     self.set_indentermat(indentermat)
     self.set_friction(friction)
-    if steps == None: 
+    if steps is None: 
       steps = [Step(name = 'loading', disp = 1.),Step(name = 'unloading', disp = 0.) ]
     self.set_steps(steps)
     self.set_is_3D(is_3D)
@@ -1884,13 +1884,13 @@ class ContactData:
     alt = delete(alt, to_delete, 0)  
     press = delete(press, to_delete, 0) 
     c1, c2 = points[:,0], points[:,1]
-    if delaunay_disp != None:
+    if delaunay_disp is not None:
       c1_temp, c2_temp = copy(c1), copy(c2)
       c1, c2 = delaunay_disp(c1, c2)
         
     points = array([c1, c2]).transpose()        
     conn = Delaunay(points).vertices
-    if delaunay_disp != None: 
+    if delaunay_disp is not None: 
       c1, c2 = c1_temp, c2_temp
       points = array([c1, c2]).transpose()  
     return points, alt, press, conn
@@ -2254,15 +2254,15 @@ class Hertz(object):
     if (a, F, h) == (None, None, None):
       raise ValueError('a, F or h are not define, one at least must be defined')
 
-    if a != None:
+    if a is not None:
       self.a = a
       self.F = self.set_force()
       
-    if F != None and a == None:
+    if F is not None and a is None:
       self.F = F
       self.a = self.set_contact_r()
       
-    if h != None and a == None and F == None:
+    if h is not None and a is None and F is None:
       self.h = h
       self.a = self.set_depth_a()    
       self.F = self.set_depth_F()
@@ -2383,11 +2383,11 @@ class Hanson(object):
  
     if (a, F, h) == (None, None, None):
       raise ValueError('a, F or h are not defined, at least one must be defined')
-    if a != None:
+    if a is not None:
       self.a = a
-    if F != None:
+    if F is not None:
       self.F = F
-    if h != None:
+    if h is not None:
       self.h = h    
     
 

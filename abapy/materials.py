@@ -144,7 +144,7 @@ class DruckerPrager(object):
     beta = float_arg(beta)
     if len(beta) != l: raise Exception, 'Parameters must all have the same length'
     self.beta = array(dtf,beta)
-    if psi == None: psi = beta
+    if psi is None: psi = beta
     psi = float_arg(psi)
     if len(psi) != l: raise Exception, 'Parameters must all have the same length'
     self.psi = array(dtf,psi)

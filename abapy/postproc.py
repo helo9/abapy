@@ -382,7 +382,7 @@ class HistoryOutput(object):
       start = s.start
       stop  = s.stop
       step  = s.step
-      if step == None: step = 1
+      if step is None: step = 1
       labs = range(start,stop,step)
     if type(s) in [tuple,list, array]:  
       for a in s:
@@ -661,14 +661,14 @@ def GetFieldOutput(odb, step, frame, instance, position, field, subField=None, l
     getLabel = lambda x : x.nodeLabel
     abqPositions = [NODAL, ELEMENT_NODAL]
     positionLabel = 'nodeLabel'
-    if labels == None: labels = [x.label for x in Instance.nodes]
+    if labels is None: labels = [x.label for x in Instance.nodes]
     if type(labels) == str:
       abqNodeSet = odb.rootAssembly.instances[instance].nodeSets[labels].nodes
       labels = array(dti,[ abqNode.label for abqNode in abqNodeSet ])
   if position == 'element': 
     getLabel = lambda x : x.elementLabel
     abqPositions = [WHOLE_ELEMENT, INTEGRATION_POINT]
-    if labels == None: labels = [x.label for x in Instance.elements]
+    if labels is None: labels = [x.label for x in Instance.elements]
     positionLabel = 'elementLabel'
     if type(labels) == str:
       abqElemSet = odb.rootAssembly.instances[instance].elementSets[labels].elements
@@ -681,12 +681,12 @@ def GetFieldOutput(odb, step, frame, instance, position, field, subField=None, l
     if abqloc in abqPositions: matchedPosition = abqloc
   Values = abqFieldOutput.getSubset(region=Instance).getSubset(position = matchedPosition)
   Nvalues = len(Values.values)
-  if subField == None:
+  if subField is None:
     if Values.type == SCALAR:
       scalarValues = Values
     else:
       raise Exception, 'field output is not scalar, maybe because subfield is None.' 
-  if subField != None: 
+  if subField is not None: 
     fieldInvariants = abqFieldOutput.validInvariants # Warning: using getsubset or getscalarfield can lead abaqus to give wrong field invariants or field components. This bug bug seems to be avoided by requestions invariants and components before subseting or scalaring the field.
     fieldComponents = abqFieldOutput.componentLabels  
     for key in fieldComponents:
@@ -936,8 +936,8 @@ def MakeFieldOutputReport(odb, instance, step, frame, report_name, original_posi
   variable = [field]
   variable.append(original_abqposition)
   if type(step) == str: step = odb.steps.keys().index(step) 
-  if sub_field != None:
-    if sub_field_prefix == None:
+  if sub_field is not None:
+    if sub_field_prefix is None:
       prefix = field
     else:
       prefix = sub_field_prefix  
@@ -949,7 +949,7 @@ def MakeFieldOutputReport(odb, instance, step, frame, report_name, original_posi
       sub_field_type = INVARIANT
       sub_field_flag = sub_field
     variable.append( ( (sub_field_type, sub_field_flag) , ) )  
-  if sub_set == None:
+  if sub_set is None:
     leaf = dgo.LeafFromPartInstance(instance)
   else:
     if sub_set_type == 'node':
@@ -1566,8 +1566,8 @@ class FieldOutput(object):
     self.position = position
     self.data = array(dtf,[])
     self.labels = array(dti,[])
-    if data != None:
-      if labels == None:
+    if data is not None:
+      if labels is None:
         labels = range(1,len(data)+1)
       else:
         if len(labels) != len(data) : raise Exception, 'labels and data must have the same length'
@@ -1665,7 +1665,7 @@ class FieldOutput(object):
       start = s.start
       stop  = s.stop
       step  = s.step
-      if step == None: step = 1
+      if step is None: step = 1
       labs = range(start,stop,step)
     if type(s) in [tuple,list, array]:  
       for a in s:
@@ -1721,7 +1721,7 @@ class FieldOutput(object):
     from array import array as a_array
     from numpy import array as n_array
     from numpy import float32, float64, uint16, uint32
-    if other == None : other = 1. 
+    if other is None : other = 1. 
     if isinstance(other,FieldOutput):
       if self.labels != other.labels: raise Exception, 'operands labels must be identicals.'
       if self.position != other.position: raise Exception, 'operands position must be identicals.'
@@ -1969,21 +1969,21 @@ class VectorFieldOutput:
     self.labels = array(dti,[])
     self.data1, self.data2, self.data3 = array(dtf,[]), array(dtf,[]), array(dtf,[])
     data = [data1, data2, data3]
-    isNone = [data1 == None, data2 == None, data3 == None]
+    isNone = [data1 is None, data2 is None, data3 is None]
     for d in data:
-      if (isinstance(d,FieldOutput) == False) and (d != None):
+      if (isinstance(d,FieldOutput) == False) and (d is not None):
         raise Exception, 'data1, data2 and data3 must be FieldOutput instances.'
     
     # Remove comments when python 2.4 is not used anymore
     if isNone != [True, True, True]:
       for i in [2,1,0]:
         d = data[i]
-        if d != None: refData = d
+        if d is not None: refData = d
       labels = refData.labels
       useShortInts = True
       positions = []
       for i in xrange(3):
-        if data[i] == None: data[i] = ZeroFieldOutput_like(refData)
+        if data[i] is None: data[i] = ZeroFieldOutput_like(refData)
         if data[i].labels != labels:
           raise Exception, 'data1, data2 and data3 must be fieldOutputs sharing the same labels.'    
         if data[i].dtf == 'd': self.dtf == 'd'
@@ -2379,19 +2379,19 @@ class TensorFieldOutput:
     self.data11, self.data22, self.data33 = array(dtf,[]), array(dtf,[]), array(dtf,[])
     self.data12, self.data13, self.data23 = array(dtf,[]), array(dtf,[]), array(dtf,[])
     data = [data11, data22, data33, data12, data13, data23]
-    isNone = [data11 == None, data22 == None, data33 == None, data12 == None, data13 == None, data23 == None]
+    isNone = [data11 is None, data22 is None, data33 is None, data12 is None, data13 is None, data23 is None]
     for d in data:
-      if (isinstance(d,FieldOutput) == False) and (d != None):
+      if (isinstance(d,FieldOutput) == False) and (d is not None):
         raise Exception, 'data11, data22, data33, data12, data13 and data23 must be FieldOutput instances.'
     if isNone != [True, True, True, True, True, True]:
       for i in [5,4,3,2,1,0]:
         d = data[i]
-        if d != None: refData = d
+        if d is not None: refData = d
       labels = refData.labels
       useShortInts = True
       positions = []
       for i in xrange(6):
-        if data[i] == None: data[i] = ZeroFieldOutput_like(refData)
+        if data[i] is None: data[i] = ZeroFieldOutput_like(refData)
         if data[i].labels != labels:
           raise Exception, 'data11, data22, data33, data12, data13 and data23 must be fieldOutputs sharing the same labels.'    
         if data[i].dtf == 'd': self.dtf == 'd'
